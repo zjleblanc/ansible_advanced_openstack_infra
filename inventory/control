@@ -1,0 +1,9 @@
+[control_node]
+control ansible_host=localhost ansible_connection=local
+
+# To use with a remote control node or jumpbox
+# control ansible_host=workstation-"{{ GUID }}".blue.osp.opentlc.com
+#
+#[control_node:vars]
+#GUID="{{ lookup('env', 'GUID') }}"
+

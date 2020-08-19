@@ -1,0 +1,56 @@
+- name: Create server instances
+  os_server:
+    cloud:            "{{ openstack_cloud       | default('openstack') }}"
+    name:             "{{ item.instance_name }}"
+    state:            "{{ item.state            | default('present') }}"
+    image:            "{{ item.image            | default('rhel-guest') }}"
+    flavor:           "{{ item.flavor           | default('m1.medium') }}"
+    key_name:         "{{ item.key_name         | default('ansible_ssh') }}"
+    wait:             "{{ item.wait             | default('yes') }}"
+    security_groups:  "{{ item.security_group_name }}"
+    meta: "group={{ item.group }},deployment_name={{ item.deployment }}"
+    nics:
+      - net-name: int_network
+      #    - net-name: ext_network
+    userdata: |
+      #!/bin/bash
+      curl -o /tmp/openstack.pub http://www.opentlc.com/download/ansible_bootcamp/openstack_keys/openstack.pub
+      cat /tmp/openstack.pub >> /home/cloud-user/.ssh/authorized_keys
+  loop: "{{ openstack_servers }}"      
+  async: 900
+  poll: 0
+  register: r_instances
+
+- name: Wait for OSP instance creation to complete
+  async_status: jid={{ item.ansible_job_id }}
+  register: r_wait
+  until: r_wait.finished
+  retries: 900
+  loop: "{{ r_instances.results }}"
+
+- name: Debug instances 
+  debug:
+    msg: "Server is {{ item.item.instance_name }}"
+  loop: "{{ r_instances.results }}"
+  
+- name: Add floating IP to instances
+  os_floating_ip:
+    cloud: openstack
+    state: present
+    reuse: yes
+    server: "{{ item.item.instance_name }}"
+    network: ext_network
+    wait: true
+    timeout: 180
+  loop: "{{ r_instances.results }}"
+  register: r_floating_ips
+
+- name: Wait for servers by name to be available
+  wait_for:
+    host: "{{ item.floating_ip.floating_ip_address }}"
+    port: 22
+    search_regex: OpenSSH
+    timeout: 600
+  loop: "{{ r_floating_ips.results }}"
+  delegate_to: "{{ inventory_hostname }}"
+...  
