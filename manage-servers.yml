@@ -1,5 +1,5 @@
 ---
-- name: Manage openStack Security Groups
+- name: Manage OpenStack Servers
   hosts: control
   gather_facts: false
   become: false
@@ -8,5 +8,5 @@
 
   roles:
 
-    - openstack_manage_security_groups
+    - openstack_manage_servers
 ...

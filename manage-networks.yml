@@ -1,20 +1,13 @@
 ---
-- name: OpenStack end to end configuration
+- name: Manage OpenStack Networks
   hosts: control
   gather_facts: true
+  become: false
   collections:
     - tok.openstack
 
   roles:
 
-    - openstack_test_role
-    - openstack_control_node_setup  
-    - openstack_manage_flavors  
-    - openstack_manage_images
-    - openstack_manage_keypair
     - openstack_manage_networks
-    - openstack_manage_security_groups
-    - openstack_manage_servers
-    - openstack_manage_inmemory_inventory
 
 ...

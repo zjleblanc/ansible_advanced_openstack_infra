@@ -27,18 +27,16 @@ openstack_flavors:
     ram: 2048
     disk: 20
 
-
 openstack_keypair:
 
-  name: ansible_ssh
+  name: ansible_ssh_key
   cloud: "{{ openstack_cloud }}"
   state: present
-  public_key_file: "{{ ansible_env.HOME }}/.ssh/test_id_rsa.pub"
+  public_key_file: "{{ ansible_env.HOME }}/.ssh/ansible_ssh_key.pub"
 
 openstack_networks:
 
-  external:
-    cloud_name: "{{ openstack_cloud }}"
+  - cloud_name: "{{ openstack_cloud }}"
     network_name: ext_network
     state: present
     provider_network_type: flat
@@ -53,8 +51,7 @@ openstack_networks:
     allocation_pool_start: 192.0.2.150
     allocation_pool_end: 192.0.2.200
 
-  internal:
-    cloud_name: openstack
+  - cloud_name: openstack
     network_name: int_network
     subnet_name: int_subnet
     cidr_network: "172.16.0.0/24"
@@ -63,12 +60,12 @@ openstack_networks:
     admin_state: yes
     ip_version: 4
     enable_dhcp: yes
-  # Public Facing Router connecting the two networks
+
+
 openstack_routers:
-  router:
+  - name: router
     cloud_name: openstack
     state: present
-    name: router
     network: ext_network
     interfaces: int_subnet
 
@@ -80,23 +77,23 @@ openstack_servers:
     group: apps
     deployment: dev
     security_group_name: apps
-    image: "{{ _server_image | default('rhel-guest') }}"
+    image: "{{ _server_image | default('rhel-7.6') }}"
 
   - instance_name: app2
     group: apps
     deployment: dev
     security_group_name: apps
-    image: "{{ _server_image | default('rhel-guest') }}"
+    image: "{{ _server_image | default('rhel-7.6') }}"
 
   - instance_name: db
     group: appdbs
     deployment: dev
     security_group_name: db
-    image: "{{ _server_image | default('rhel-guest') }}"
+    image: "{{ _server_image | default('rhel-7.6') }}"
 
   - instance_name: frontend
     group: frontends
     deployment: dev
     security_group_name: frontend
-    image: "{{ _server_image | default('rhel-guest') }}"
+    image: "{{ _server_image | default('rhel-7.6') }}"
 ...
