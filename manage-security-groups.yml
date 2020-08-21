@@ -1,6 +1,6 @@
 ---
 - name: Manage openStack Security Groups
-  hosts: control
+  hosts: control_node
   gather_facts: false
   become: false
   collections:

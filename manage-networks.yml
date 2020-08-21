@@ -1,6 +1,6 @@
 ---
 - name: Manage OpenStack Networks
-  hosts: control
+  hosts: control_node
   gather_facts: true
   become: false
   collections:

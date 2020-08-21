@@ -1,0 +1,5 @@
+[control_node]
+localhost ansible_connection=local
+
+[control_node:vars]
+ansible_python_interpreter=/usr/bin/env python3

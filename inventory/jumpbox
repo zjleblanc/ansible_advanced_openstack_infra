@@ -1,0 +1,7 @@
+[control_node]
+control ansible_host=workstation-"{{ GUID }}".blue.osp.opentlc.com
+
+[control_node:vars]
+GUID="{{ lookup('env', 'GUID') }}"
+ansible_python_interpreter=~/openstack-venv/bin/python
+
