@@ -1,4 +1,5 @@
 openstack_cloud: openstack
+provisioning_ssh_key: ansible_ssh_key
 
 openstack_images:
 
@@ -29,10 +30,10 @@ openstack_flavors:
 
 openstack_keypair:
 
-  name: ansible_ssh_key
+  name: "{{ provisioning_ssh_key }}"
   cloud: "{{ openstack_cloud }}"
   state: present
-  public_key_file: "{{ ansible_env.HOME }}/.ssh/ansible_ssh_key.pub"
+  public_key_file: "{{ ansible_env.HOME }}/.ssh/{{ provisioning_ssh_key }}.pub"
 
 openstack_networks:
 
@@ -74,25 +75,25 @@ openstack_security_groups: []
 openstack_servers:
 
   - instance_name: app1
-    group: apps
+    group: app_servers
     deployment: dev
     security_group_name: apps
     image: "{{ _server_image | default('rhel-7.6') }}"
 
   - instance_name: app2
-    group: apps
+    group: app_servers
     deployment: dev
     security_group_name: apps
     image: "{{ _server_image | default('rhel-7.6') }}"
 
   - instance_name: db
-    group: appdbs
+    group: database_servers
     deployment: dev
     security_group_name: db
     image: "{{ _server_image | default('rhel-7.6') }}"
 
-  - instance_name: frontend
-    group: frontends
+  - instance_name: frontend1
+    group: load_balancers
     deployment: dev
     security_group_name: frontend
     image: "{{ _server_image | default('rhel-7.6') }}"
