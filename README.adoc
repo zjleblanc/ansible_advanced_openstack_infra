@@ -1,16 +1,17 @@
 == Overview
 
-A monolithic repo (openstack collection, three tier app roles etc) to deploy end to end openstack three-tier-app.
+A solution to build the necessary infrastucture on OpenStack for Multi Tier App.
+
+This is, today, monolithic in that the `tok.openstack` collection is *currently` embedded inside the repo.
 
 
+[NOTE]
+====
+The server component is an empty collection role
 === Notes
 
 * defaults to run from remote control node 
 ** To run locally on workstation just change inventory so it is localhost
-
-NOTE: There is an ansible vault and the password is the common redhat password...
-
-`ansible-playbook deploy-all.yml --ask-vault-pass`
 
 === Three playbooks
 

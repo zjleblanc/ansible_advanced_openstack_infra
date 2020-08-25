@@ -1,0 +1,15 @@
+---
+
+# - import_playbook: setup-jumpbox.yml
+
+- import_playbook: manage-flavors.yml
+- import_playbook: manage-images.yml
+- import_playbook: manage-keypairs.yml
+
+- import_playbook: manage-networks.yml
+- import_playbook: manage-security-groups.yml
+- import_playbook: manage-servers.yml
+
+# - import_playbook: manage-servers-example.yml
+
+...

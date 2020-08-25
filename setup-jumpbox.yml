@@ -1,0 +1,15 @@
+---
+- name: OpenStack end to end configuration
+  hosts: control_node
+  gather_facts: false
+  collections:
+    - tok.openstack
+
+  tasks:  
+
+    - name: Setup control node
+      import_role: 
+        name: openstack_control_node_setup  
+        #      delegate_to: control
+
+...
